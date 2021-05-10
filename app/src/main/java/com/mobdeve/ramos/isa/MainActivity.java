@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                             if (insert == true) {
                                 Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent (getApplicationContext(), HomeActivity.class);
+                                intent.putExtra("username", username.getText().toString());
                                 startActivity(intent);
                             } else{
                                 Toast.makeText(MainActivity.this, "Registered Failed", Toast.LENGTH_SHORT).show();
