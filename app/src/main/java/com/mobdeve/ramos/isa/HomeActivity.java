@@ -12,6 +12,7 @@ public class HomeActivity extends AppCompatActivity {
 
     TextView username_tv;
     ConstraintLayout profile_layout;
+    String usernametemp;
 
 
     @Override
@@ -23,13 +24,14 @@ public class HomeActivity extends AppCompatActivity {
         profile_layout = (ConstraintLayout) findViewById(R.id.profile_layout);
 
         Intent intent = getIntent();
-        String usernametemp = intent.getStringExtra("username");
+         usernametemp = intent.getStringExtra("username");
         username_tv.setText(usernametemp);
 
         profile_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
+                intent.putExtra("username",usernametemp);//pass username to profile for getting creds in DB
                 startActivity(intent);
             }
         });

@@ -29,8 +29,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public Boolean insertData(String username, String password){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("username", username);
-        contentValues.put("password", password);
+        contentValues.put("username", username); //0
+        contentValues.put("password", password); //1
         long result = MyDB.insert("users", null, contentValues);
         if(result ==-1) return false;
         else
@@ -53,6 +53,28 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+
+    public Cursor getUserCred(String username){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from users where username = ?", new String[] {username});
+        return cursor;
+    }
+
+    public Boolean updateCreds(String username, String password){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        if(username.isEmpty()){// update password only
+            contentValues.put("password", password); //1
+            MyDB.update("users",contentValues,"username = ?", new String[] {username});
+            return true;
+        }
+        else{//update everything
+            contentValues.put("username", username); //0
+            contentValues.put("password", password); //1
+             MyDB.update("users",contentValues,"username = ?", new String[] {username});
+             return true;
+        }
     }
 
 
