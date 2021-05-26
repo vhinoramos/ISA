@@ -89,6 +89,14 @@ public class ImageCapture extends AppCompatActivity {
             }
         });
         //end of launches camera
+
+        next_btn.setOnClickListener(new View.OnClickListener() { //opens saved images
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ImageCapture.this, savedImages.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

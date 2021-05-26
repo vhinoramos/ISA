@@ -98,5 +98,11 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Cursor viewImages(){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from images ",null);
+        return cursor;
+    }
+
 
 }

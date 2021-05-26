@@ -32,13 +32,10 @@ public class HomeActivity extends AppCompatActivity {
     String usernametemp;
     DBHelper DB;
     ImageView lastcapture;
-    DbBitmapUtility img_conv;
 
-    AlertDialog.Builder dialogBuilder;
-    AlertDialog dialog;
-    EditText imagename;
-    Button save_btn, cancel_btn;
-    String imagename_S;
+    Button saved_images_btn, saved_texts_btn, saved_speeches_btn;
+
+
 
 
 
@@ -50,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         username_tv = (TextView) findViewById(R.id.username_tv);
         profile_layout = (ConstraintLayout) findViewById(R.id.profile_layout);
         lastcapture = (ImageView) findViewById(R.id.lastcapture);
+        saved_images_btn = (Button) findViewById(R.id.saved_images_btn);
         DB = new DBHelper(this);
 
         Intent intent = getIntent();
@@ -97,55 +95,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100){
-
-            //creates a pop up to input image name
-            dialogBuilder = new AlertDialog.Builder(this);
-            final View popuptext = getLayoutInflater().inflate(R.layout.popup, null);
-            imagename = (EditText) popuptext.findViewById(R.id.imagename);
-            save_btn = (Button) popuptext.findViewById(R.id.save_btn);
-
-            imagename_S = imagename.toString(); //this is the image name //not getting String input
-
-            dialogBuilder.setView(popuptext);
-            dialog = dialogBuilder.create();
-            dialog.show();
-
-            save_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();;
-                }
-            });
-
-        //save image to DB
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap)); //covert bitmap to byte array
-            if(insert == true){
-                Toast.makeText(HomeActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
+        saved_images_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, savedImages.class);
+                startActivity(intent);
             }
-         // end of save image to DB
+        });
 
-         //get image from DB
-            Cursor cursor = DB.getimage(imagename_S);
-            cursor.moveToFirst();
-            byte[] imagetemp = cursor.getBlob(1);
-            cursor.close();
-         // end of get image from DB
-
-            //convert image to display
-            Bitmap bitmapimage = BitmapFactory.decodeByteArray(imagetemp, 0, imagetemp.length);
-            lastcapture.setImageBitmap(bitmapimage); //bitmap image //optional
-
-
-        }
     }
 
-    */
 }
