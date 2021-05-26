@@ -18,13 +18,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase MyDB) {
-        MyDB.execSQL("create Table users(username TEXT primary key, password TEXT, image BLOB )");
+        MyDB.execSQL("create Table users(username TEXT primary key, password TEXT )");
+        MyDB.execSQL("create Table images(imagename TEXT,  image BLOB )");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase MyDB, int oldVersion, int newVersion) {
         MyDB.execSQL("drop Table if exists users");
+        MyDB.execSQL("drop Table if exists images");
     }
 
     public Boolean insertData(String username, String password){
@@ -38,21 +40,22 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public Boolean insertImage(byte[] image){
+    public Boolean insertImage(String imagename, byte[] image){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put("imagename", imagename);
         contentValues.put("image", image);
-        long result = MyDB.insert("users", null, contentValues);
+        long result = MyDB.insert("images", null, contentValues); //insert to images table
         if(result ==-1) return false;
         else
             return true;
     }
 
-    public byte[] getimage(String username, int index){
+    public Cursor getimage(String imagename){
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select image from users where username = ?", new String[] {username});
-        byte[] image = cursor.getBlob(index);
-        return image;
+        Cursor cursor = MyDB.rawQuery("Select * from images where imagename = ?", new String[] {imagename});
+
+        return cursor;
     }
 
     public Boolean checkusername(String username){
