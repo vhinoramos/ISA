@@ -9,10 +9,13 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -20,6 +23,10 @@ public class HomeActivity extends AppCompatActivity {
     TextView username_tv;
     ConstraintLayout profile_layout;
     String usernametemp;
+    DBHelper DB;
+    ImageView lastcapture;
+    DbBitmapUtility img_conv;
+
 
 
     @Override
@@ -29,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
 
         username_tv = (TextView) findViewById(R.id.username_tv);
         profile_layout = (ConstraintLayout) findViewById(R.id.profile_layout);
+        lastcapture = (ImageView) findViewById(R.id.lastcapture);
+        DB = new DBHelper(this);
 
         Intent intent = getIntent();
         usernametemp = intent.getStringExtra("username");
@@ -62,4 +71,17 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100){
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            //lastcapture.setImageBitmap(bitmap); //bitmap is the image captured to test
+
+            Boolean insert = DB.insertImage(img_conv.getBytes(bitmap)); //covert bitmap to byte array
+            Bitmap image = img_conv.getImage(DB.getimage(usernametemp, 0)); // convert byte[] to bitmap
+            lastcapture.setImageBitmap(image); //getimage here
+
+        }
+    }
 }

@@ -18,7 +18,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase MyDB) {
-        MyDB.execSQL("create Table users(username TEXT primary key, password TEXT)");
+        MyDB.execSQL("create Table users(username TEXT primary key, password TEXT, image BLOB )");
+
     }
 
     @Override
@@ -35,6 +36,23 @@ public class DBHelper extends SQLiteOpenHelper {
         if(result ==-1) return false;
         else
             return true;
+    }
+
+    public Boolean insertImage(byte[] image){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("image", image);
+        long result = MyDB.insert("users", null, contentValues);
+        if(result ==-1) return false;
+        else
+            return true;
+    }
+
+    public byte[] getimage(String username, int index){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select image from users where username = ?", new String[] {username});
+        byte[] image = cursor.getBlob(index);
+        return image;
     }
 
     public Boolean checkusername(String username){
