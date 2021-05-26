@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,12 +57,18 @@ public class HomeActivity extends AppCompatActivity {
         username_tv.setText(usernametemp);
 
         Button btn = (Button) findViewById(R.id.camera_btn);
+        /*
+        Button btn = (Button) findViewById(R.id.camera_btn);
+
         if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
                     Manifest.permission.CAMERA
             }, 100);
         }
+
+        */
+
 
         profile_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +79,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    /*
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,18 +87,19 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent, 100);
             }
         });
+        */
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, ImageCapture.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
-
-
-    public void popuptext(){
-
-
-
-    }
-
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -101,9 +111,9 @@ public class HomeActivity extends AppCompatActivity {
             imagename = (EditText) popuptext.findViewById(R.id.imagename);
             save_btn = (Button) popuptext.findViewById(R.id.save_btn);
 
-            imagename_S = imagename.getText().toString(); //this is the image name
+            imagename_S = imagename.toString(); //this is the image name //not getting String input
 
-            dialogBuilder.setView((popuptext));
+            dialogBuilder.setView(popuptext);
             dialog = dialogBuilder.create();
             dialog.show();
 
@@ -114,22 +124,28 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
+        //save image to DB
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap)); //covert bitmap to byte array
             if(insert == true){
                 Toast.makeText(HomeActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
             }
+         // end of save image to DB
 
+         //get image from DB
             Cursor cursor = DB.getimage(imagename_S);
             cursor.moveToFirst();
             byte[] imagetemp = cursor.getBlob(1);
             cursor.close();
+         // end of get image from DB
 
+            //convert image to display
             Bitmap bitmapimage = BitmapFactory.decodeByteArray(imagetemp, 0, imagetemp.length);
-            lastcapture.setImageBitmap(bitmapimage); //bitmap image
-           // Bitmap image = img_conv.getImage(imagetemp); // convert byte[] to bitmap
+            lastcapture.setImageBitmap(bitmapimage); //bitmap image //optional
 
 
         }
     }
+
+    */
 }

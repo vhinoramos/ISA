@@ -13,6 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ISA">
+        <activity android:name=".savedImages"></activity>
+        <activity android:name=".ImageCapture" />
         <activity android:name=".Profile" />
         <activity android:name=".HomeActivity" />
         <activity

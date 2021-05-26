@@ -101,14 +101,4 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/lastcapture"
-        android:layout_width="151dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="24dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saved_speeched_btn"
-        app:srcCompat="@drawable/untitled_design__1_" />
 </androidx.constraintlayout.widget.ConstraintLayout>
