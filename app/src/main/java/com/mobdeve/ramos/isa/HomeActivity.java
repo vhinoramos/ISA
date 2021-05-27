@@ -57,17 +57,6 @@ public class HomeActivity extends AppCompatActivity {
         username_tv.setText(usernametemp);
 
         Button btn = (Button) findViewById(R.id.camera_btn);
-        /*
-        Button btn = (Button) findViewById(R.id.camera_btn);
-
-        if (ContextCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(HomeActivity.this, new String[]{
-                    Manifest.permission.CAMERA
-            }, 100);
-        }
-
-        */
 
 
         profile_layout.setOnClickListener(new View.OnClickListener() {
@@ -79,15 +68,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-    /*
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
-            }
-        });
-        */
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
