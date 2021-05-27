@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/*
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +32,7 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-
+*/
 public class ImageCapture extends AppCompatActivity {
 
     DbBitmapUtility img_conv;
@@ -123,7 +124,7 @@ public class ImageCapture extends AppCompatActivity {
             imagename_S = imagename.getText().toString(); // image name in string
             //save image to DB
             Bitmap bitmap = (Bitmap) data.getExtras().get("data"); //getting the image
-
+/*
             //1. create a FirebaseVisionImage object from a Bitmap object:
             FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
             // Get instance of Firebase Vision
@@ -147,7 +148,7 @@ public class ImageCapture extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
                 }
             });
-
+      */
             Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap)); //covert bitmap to byte array
             if(insert == true){
                 Toast.makeText(ImageCapture.this, "Image Saved", Toast.LENGTH_SHORT).show();
