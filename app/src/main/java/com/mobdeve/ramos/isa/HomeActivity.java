@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     DBHelper DB;
     ImageView lastcapture;
 
-    Button saved_images_btn, text_speech_btn, speech_to_text;
+    Button saved_images_btn, text_speech_btn, speech_to_text, scan_btn;
 
 
 
@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         saved_images_btn = (Button) findViewById(R.id.saved_images_btn);
         text_speech_btn = (Button) findViewById(R.id.text_speech_btn);
         speech_to_text = (Button) findViewById(R.id.speech_text_btn);
+        scan_btn = (Button) findViewById(R.id.scan_btn);
         DB = new DBHelper(this);
 
         Intent intent = getIntent();
@@ -89,6 +90,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,texttospeech.class);
+                startActivity(intent);
+            }
+        });
+
+        scan_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (HomeActivity.this, scanner.class);
                 startActivity(intent);
             }
         });

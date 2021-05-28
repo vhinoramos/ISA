@@ -3,7 +3,6 @@
     package="com.mobdeve.ramos.isa">
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -13,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ISA">
-        <activity android:name=".texttospeech"></activity>
+        <activity android:name=".scanner"></activity>
+        <activity android:name=".texttospeech" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
