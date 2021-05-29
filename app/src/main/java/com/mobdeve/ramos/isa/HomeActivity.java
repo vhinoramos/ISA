@@ -102,6 +102,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        speech_to_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this,speechtotext.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 }
