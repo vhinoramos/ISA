@@ -6,6 +6,7 @@ import android.os.Build;
 import android.speech.RecognizerIntent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class speechtotext extends AppCompatActivity {
     private TextView tvText;
     String gotText;
     String date;
+    Button saved_texts_btn;
 
     DBHelper DB;
 
@@ -39,6 +41,7 @@ public class speechtotext extends AppCompatActivity {
 
         tvText = (TextView) findViewById(R.id.tvText);
         btnSpeak = (ImageButton) findViewById( R.id.btnSpeak);
+        saved_texts_btn = (Button) findViewById(R.id.saved_texts_btn) ;
         date = generateDateString();
         DB = new DBHelper(this);
 
@@ -55,6 +58,14 @@ public class speechtotext extends AppCompatActivity {
                    Toast.makeText(getApplicationContext(),"Your Device doesn't support Speech to Text",Toast.LENGTH_SHORT).show();
                    e.printStackTrace();
                }
+            }
+        });
+
+        saved_texts_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(speechtotext.this, savedTexts.class);
+                startActivity(intent);
             }
         });
 

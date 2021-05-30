@@ -68,7 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getText(String text_type){
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from users where text_type = ?", new String[] {text_type});
+        Cursor cursor = MyDB.rawQuery("Select * from texts where text_type = ?", new String[] {text_type});
         return cursor;
     }
 
