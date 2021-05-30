@@ -67,9 +67,11 @@ public class ImageListAdapter extends BaseAdapter {
         Image image = imageList.get(position);
         holder.txtName.setText(image.getImagename());
 
+        //for image
         byte[] imgImage = image.getImage();
         Bitmap bitmap = BitmapFactory.decodeByteArray(imgImage, 0, imgImage.length);
         holder.imageView.setImageBitmap(bitmap);
+
         return row;
     }
 }
