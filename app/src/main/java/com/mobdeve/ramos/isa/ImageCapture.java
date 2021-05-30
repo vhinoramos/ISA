@@ -43,6 +43,7 @@ public class ImageCapture extends AppCompatActivity {
     Button launch_btn, next_btn, detect_btn;
     TextView text_display;
     String imagename_S;
+    String usernametemp;
 
     ImageView lastcapture;
 
@@ -61,6 +62,9 @@ public class ImageCapture extends AppCompatActivity {
         next_btn = (Button) findViewById(R.id.next_btn); // next button
         detect_btn = (Button) findViewById(R.id.detect_btn);
         text_display = (TextView) findViewById(R.id.text_display);
+
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
 
 
         //permission to open camera
@@ -110,7 +114,9 @@ public class ImageCapture extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ImageCapture.this, savedImages.class);
+                intent.putExtra("username",usernametemp);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -150,14 +156,14 @@ public class ImageCapture extends AppCompatActivity {
                 }
             });
       */
-            Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap)); //covert bitmap to byte array
+            Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap),usernametemp); //covert bitmap to byte array
             if(insert == true){
                 Toast.makeText(ImageCapture.this, "Image Saved", Toast.LENGTH_SHORT).show();
             }
             // end of save image to DB
 
             //get image from DB
-            Cursor cursor = DB.getimage(imagename_S);
+            Cursor cursor = DB.getimage(imagename_S,usernametemp);
             cursor.moveToFirst();
             byte[] imagetemp = cursor.getBlob(1);
             cursor.close();

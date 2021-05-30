@@ -19,8 +19,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase MyDB) {
         MyDB.execSQL("create Table users(username TEXT primary key, password TEXT )");
-        MyDB.execSQL("create Table images(imagename TEXT,  image BLOB )");
-        MyDB.execSQL("create Table texts(text_type TEXT,  text TEXT, date TEXT)"); // db for speech to text
+        MyDB.execSQL("create Table images(imagename TEXT,  image BLOB, username TEXT)");
+        MyDB.execSQL("create Table texts(text_type TEXT,  text TEXT, date TEXT, username TEXT)"); // db for speech to text
 
 
     }
@@ -43,38 +43,40 @@ public class DBHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public Boolean insertImage(String imagename, byte[] image){
+    public Boolean insertImage(String imagename, byte[] image, String username){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("imagename", imagename);
         contentValues.put("image", image);
+        contentValues.put("username", username);
         long result = MyDB.insert("images", null, contentValues); //insert to images table
         if(result ==-1) return false;
         else
             return true;
     }
 
-    public Boolean insertText(String text_type, String text, String date){
+    public Boolean insertText(String text_type, String text, String date, String username){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("text_type", text_type); //0
         contentValues.put("text", text); //1
-        contentValues.put("date", date); //1
+        contentValues.put("date", date); //2
+        contentValues.put("username", username); //3
         long result = MyDB.insert("texts", null, contentValues);
         if(result ==-1) return false;
         else
             return true;
     }
 
-    public Cursor getText(String text_type){
+    public Cursor getText(String text_type, String username){
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from texts where text_type = ?", new String[] {text_type});
+        Cursor cursor = MyDB.rawQuery("Select * from texts where text_type = ? AND username = ?", new String[] {text_type, username});
         return cursor;
     }
 
-    public Cursor getimage(String imagename){
+    public Cursor getimage(String imagename, String username){
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from images where imagename = ?", new String[] {imagename});
+        Cursor cursor = MyDB.rawQuery("Select * from images where imagename = ? AND username = ?", new String[] {imagename, username});
 
         return cursor;
     }
@@ -119,9 +121,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor viewImages(){
+    public Cursor viewImages(String username){
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from images ",null);
+        Cursor cursor = MyDB.rawQuery("Select * from images WHERE username = ? ",  new String[] {username});
         return cursor;
     }
 

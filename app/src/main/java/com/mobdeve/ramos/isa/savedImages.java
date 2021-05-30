@@ -2,6 +2,7 @@ package com.mobdeve.ramos.isa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class savedImages extends AppCompatActivity {
     ArrayList<Image> list;
     ImageListAdapter adapter = null;
     DBHelper DB; //added to access DB directly
+    String usernametemp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +33,12 @@ public class savedImages extends AppCompatActivity {
         list = new ArrayList<>();
         adapter = new ImageListAdapter(this, R.layout.single_image,list);
         gridView.setAdapter(adapter);
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
+
 
         // get all data from sqlite
-        Cursor cursor = DB.viewImages();
+        Cursor cursor = DB.viewImages(usernametemp);
         list.clear();
         while(cursor.moveToNext()){
             String name = cursor.getString(0);
@@ -47,7 +52,9 @@ public class savedImages extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(savedImages.this, HomeActivity.class);
+                intent.putExtra("username",usernametemp);
                 startActivity(intent);
+                finish();
             }
         });
 

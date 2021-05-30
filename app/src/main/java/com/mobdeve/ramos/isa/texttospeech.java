@@ -20,7 +20,8 @@ public class texttospeech extends AppCompatActivity {
     private EditText mEditText;
     private SeekBar mSeekBarPitch;
     private SeekBar mSeekBarSpeed;
-    private Button mButtonSpeak;
+    private Button mButtonSpeak, texttospeech_home;
+    String usernametemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,9 @@ public class texttospeech extends AppCompatActivity {
         setContentView(R.layout.activity_texttospeech);
 
         mButtonSpeak = findViewById(R.id.button_speak);
+        texttospeech_home = findViewById(R.id.texttospeech_home);
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -48,6 +52,7 @@ public class texttospeech extends AppCompatActivity {
             }
         });
 
+
         mEditText = findViewById(R.id.edit_text);
         mSeekBarPitch = findViewById(R.id.seek_bar_pitch);
         mSeekBarSpeed = findViewById(R.id.seek_bar_speed);
@@ -56,6 +61,15 @@ public class texttospeech extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 speak();
+            }
+        });
+
+        texttospeech_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(texttospeech.this, HomeActivity.class);
+                intent.putExtra("username", usernametemp);
+                startActivity(intent);
             }
         });
     }

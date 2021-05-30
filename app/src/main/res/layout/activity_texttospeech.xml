@@ -8,6 +8,13 @@
     android:padding="16dp"
     tools:context=".texttospeech">
 
+    <Button
+        android:id="@+id/texttospeech_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="300dp"
+        android:text="Home" />
+
     <EditText
         android:id="@+id/edit_text"
         android:layout_width="match_parent"

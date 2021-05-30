@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     DBHelper DB;
     ImageView lastcapture;
 
-    Button saved_images_btn, text_speech_btn, speech_text_btn, scan_btn;
+    Button saved_images_btn, text_speech_btn, speech_text_btn, scan_btn, logout_home;
 
 
 
@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
         text_speech_btn = (Button) findViewById(R.id.text_speech_btn);
         speech_text_btn = (Button) findViewById(R.id.speech_text_btn);
         scan_btn = (Button) findViewById(R.id.scan_btn);
+        logout_home =(Button) findViewById(R.id.logout_home);
         DB = new DBHelper(this);
 
         Intent intent = getIntent();
@@ -72,17 +73,21 @@ public class HomeActivity extends AppCompatActivity {
         speech_text_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, speechtotext.class); //anong meron?
+                Intent intent = new Intent(HomeActivity.this, speechtotext.class);
+                intent.putExtra("username", usernametemp);//pass username to speech to text for getting texts in DB
                 startActivity(intent);
+                finish();
             }
         });
 
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() { //launch camera to DB
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, ImageCapture.class);
+                intent.putExtra("username", usernametemp);//pass username to speech to text for getting texts in DB
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -90,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, savedImages.class);
+                intent.putExtra("username", usernametemp);//pass username to profile for getting creds in DB
                 startActivity(intent);
             }
         });
@@ -98,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this,texttospeech.class);
+                intent.putExtra("username", usernametemp);//pass username to profile for getting creds in DB
                 startActivity(intent);
             }
         });
@@ -106,6 +113,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent (HomeActivity.this, scanner.class);
+                startActivity(intent);
+            }
+        });
+
+        logout_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent (HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

@@ -30,6 +30,7 @@ public class speechtotext extends AppCompatActivity {
     String gotText;
     String date;
     Button saved_texts_btn;
+    String usernametemp;
 
     DBHelper DB;
 
@@ -44,6 +45,10 @@ public class speechtotext extends AppCompatActivity {
         saved_texts_btn = (Button) findViewById(R.id.saved_texts_btn) ;
         date = generateDateString();
         DB = new DBHelper(this);
+
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
+
 
         btnSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +70,9 @@ public class speechtotext extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(speechtotext.this, savedTexts.class);
+                intent.putExtra("username",usernametemp);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -88,7 +95,7 @@ public class speechtotext extends AppCompatActivity {
     }
 
     private void savetext() {
-        Boolean insert = DB.insertText("SpeechToText",gotText, date);
+        Boolean insert = DB.insertText("SpeechToText",gotText, date,usernametemp);
         if(insert == true){
             Toast.makeText(speechtotext.this, "Speech Saved", Toast.LENGTH_SHORT).show();
         }

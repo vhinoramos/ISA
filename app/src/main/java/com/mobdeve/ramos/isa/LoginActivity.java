@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class LoginActivity extends AppCompatActivity {
     EditText username, password;
-    Button btnlogin;
+    Button btnlogin, register_btn;
     DBHelper DB;
 
     @Override
@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.username1);
         password = (EditText) findViewById(R.id.password1);
         btnlogin = (Button) findViewById(R.id.btnsignin1);
+        register_btn = (Button) findViewById(R.id.register_btn);
         DB = new DBHelper(this);
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +50,15 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        register_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

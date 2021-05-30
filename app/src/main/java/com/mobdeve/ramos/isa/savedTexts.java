@@ -19,6 +19,7 @@ public class savedTexts extends AppCompatActivity {
     ArrayList<Text> list;
     TextListAdapter adapter = null;
     DBHelper DB; //added to access DB directly
+    String usernametemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +33,11 @@ public class savedTexts extends AppCompatActivity {
         adapter = new TextListAdapter(this, R.layout.single_text,list);
         listView.setAdapter(adapter);
 
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
+
         // get all data from sqlite
-        Cursor cursor = DB.getText("SpeechToText");
+        Cursor cursor = DB.getText("SpeechToText", usernametemp);
         list.clear();
         while(cursor.moveToNext()){
             String text = cursor.getString(1);
@@ -47,7 +51,9 @@ public class savedTexts extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(savedTexts.this, HomeActivity.class);
+                intent.putExtra("username",usernametemp);
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -31,5 +31,17 @@
         android:layout_marginTop="50dp"
         android:text="Sign In" />
 
+    <Button
+        android:id="@+id/register_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_below="@+id/btnsignin1"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="67dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginBottom="320dp"
+        android:text="Register" />
+
 
 </RelativeLayout>
