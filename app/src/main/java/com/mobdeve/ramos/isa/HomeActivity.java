@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     DBHelper DB;
     ImageView lastcapture;
 
-    Button saved_images_btn, text_speech_btn, speech_to_text, scan_btn;
+    Button saved_images_btn, text_speech_btn, speech_text_btn, scan_btn;
 
 
 
@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         lastcapture = (ImageView) findViewById(R.id.lastcapture);
         saved_images_btn = (Button) findViewById(R.id.saved_images_btn);
         text_speech_btn = (Button) findViewById(R.id.text_speech_btn);
-        speech_to_text = (Button) findViewById(R.id.speech_text_btn);
+        speech_text_btn = (Button) findViewById(R.id.speech_text_btn);
         scan_btn = (Button) findViewById(R.id.scan_btn);
         DB = new DBHelper(this);
 
@@ -65,6 +65,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, Profile.class);
                 intent.putExtra("username", usernametemp);//pass username to profile for getting creds in DB
+                startActivity(intent);
+            }
+        });
+
+        speech_text_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, speechtotext.class); //anong meron?
                 startActivity(intent);
             }
         });
@@ -102,13 +110,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        speech_to_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this,speechtotext.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
 

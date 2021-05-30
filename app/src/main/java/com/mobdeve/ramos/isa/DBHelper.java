@@ -20,6 +20,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase MyDB) {
         MyDB.execSQL("create Table users(username TEXT primary key, password TEXT )");
         MyDB.execSQL("create Table images(imagename TEXT,  image BLOB )");
+        MyDB.execSQL("create Table texts(text_type TEXT,  text TEXT )"); // db for speech to text
+
 
     }
 
@@ -27,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase MyDB, int oldVersion, int newVersion) {
         MyDB.execSQL("drop Table if exists users");
         MyDB.execSQL("drop Table if exists images");
+        MyDB.execSQL("drop Table if exists texts");
     }
 
     public Boolean insertData(String username, String password){
@@ -49,6 +52,22 @@ public class DBHelper extends SQLiteOpenHelper {
         if(result ==-1) return false;
         else
             return true;
+    }
+
+    public Boolean insertText(String text_type, String text){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("text_type", text_type); //0
+        contentValues.put("text", text); //1
+        long result = MyDB.insert("texts", null, contentValues);
+        if(result ==-1) return false;
+        else
+            return true;
+    }
+    public Cursor getText(String text_type){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from users where text_type = ?", new String[] {text_type});
+        return cursor;
     }
 
     public Cursor getimage(String imagename){

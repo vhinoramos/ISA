@@ -6,8 +6,8 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ISA">
-        <activity android:name=".speechtotext"></activity>
+        <activity android:name=".savedTexts"></activity>
+        <activity android:name=".speechtotext" />
         <activity android:name=".scanner" />
         <activity android:name=".texttospeech" />
 
