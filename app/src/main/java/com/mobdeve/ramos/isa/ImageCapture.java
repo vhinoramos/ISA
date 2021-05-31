@@ -13,16 +13,22 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 
 /*
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,6 +52,7 @@ public class ImageCapture extends AppCompatActivity {
     String usernametemp;
 
     ImageView lastcapture;
+    Bitmap bitmap;
 
     DBHelper DB;
 
@@ -120,7 +127,32 @@ public class ImageCapture extends AppCompatActivity {
             }
         });
 
+        detect_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                text_display.setText("HELLO");
+            }
+        });
+
     }
+    public void detect(){
+        TextRecognizer recogizer = new TextRecognizer.Builder(ImageCapture.this).build();
+
+        Frame frame =  new Frame.Builder().setBitmap(bitmap).build();
+
+        SparseArray<TextBlock> sparseArray = recogizer.detect(frame);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(int i = 0; i<sparseArray.size(); i++){
+            TextBlock tx = sparseArray.get(i);
+            String str = tx.getValue();
+
+            stringBuilder.append(str);
+        }
+        text_display.setText(stringBuilder);
+
+    }
+
 
 
     @Override
@@ -130,32 +162,8 @@ public class ImageCapture extends AppCompatActivity {
 
             imagename_S = imagename.getText().toString(); // image name in string
             //save image to DB
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data"); //getting the image
-/*
-            //1. create a FirebaseVisionImage object from a Bitmap object:
-            FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
-            // Get instance of Firebase Vision
-            FirebaseVision firebaseVision = FirebaseVision.getInstance();
-            // 3. Create an instance of FirebaseVisionTExtREcognizer
-            FirebaseVisionTextRecognizer firebaseVisionTextRecognizer = firebaseVision.getOnDeviceTextRecognizer();
-            // 4. Create a task to process the image
-            Task<FirebaseVisionText> task = firebaseVisionTextRecognizer.processImage(firebaseVisionImage);
-            // if task is success
-            task.addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                @Override
-                public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                    String s = firebaseVisionText.getText();
-                    text_display.setText(s);
-                }
-            });
-            // 6. if task is failure
-            task.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            });
-      */
+             bitmap = (Bitmap) data.getExtras().get("data"); //getting the image
+
             Boolean insert = DB.insertImage(imagename_S,img_conv.getBytes(bitmap),usernametemp); //covert bitmap to byte array
             if(insert == true){
                 Toast.makeText(ImageCapture.this, "Image Saved", Toast.LENGTH_SHORT).show();
@@ -172,8 +180,6 @@ public class ImageCapture extends AppCompatActivity {
             //convert image to display
             Bitmap bitmapimage = BitmapFactory.decodeByteArray(imagetemp, 0, imagetemp.length); //convert image for displays
             lastcapture.setImageBitmap(bitmapimage); //bitmap image //optional
-
-
 
         }
     }

@@ -113,6 +113,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent (HomeActivity.this, scanner.class);
+                intent.putExtra("username", usernametemp);//pass username to profile for getting creds in DB
                 startActivity(intent);
             }
         });

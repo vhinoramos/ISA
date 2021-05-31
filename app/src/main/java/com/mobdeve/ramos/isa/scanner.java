@@ -6,7 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +21,14 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
@@ -29,15 +38,13 @@ import static android.Manifest.permission.CAMERA;
 
 public class scanner extends AppCompatActivity {
 
-    private TextView textView1;
-    private SurfaceView surfaceview;
-
-    private CameraSource cameraSource;
-    private TextRecognizer textRecognizer;
-
-    private TextToSpeech textToSpeech;
-
-    private String stringResult = null;
+    ImageView imageView;
+    TextView detectedText;
+    Button btn_detect, next_btn1,newimg_btn;
+    String usernametemp;
+    DBHelper DB;
+    Bitmap bitmap;
+    DbBitmapUtility img_conv;
 
 
     @Override
@@ -45,104 +52,65 @@ public class scanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
-        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, PackageManager.PERMISSION_GRANTED);
+        imageView =  findViewById(R.id.img);
+        detectedText = findViewById(R.id.detectedText);
+        btn_detect =  findViewById(R.id.button_detected);
+        next_btn1 = findViewById(R.id.next_btn1);
+        newimg_btn = findViewById(R.id.newimg_btn);
+        DB = new DBHelper(this);
 
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        Intent intent = getIntent();
+        usernametemp = intent.getStringExtra("username");
+
+        btn_detect.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onInit(int status) {
-
-            }
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        cameraSource.release();
-    }
-
-    private void textRecognizer() {
-        textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-        cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
-                .setRequestedPreviewSize(1280, 1024)
-                .build();
-
-        surfaceview = findViewById(R.id.surfaceView);
-
-        surfaceview.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(scanner.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    cameraSource.start(surfaceview.getHolder());
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-                    cameraSource.stop();
+            public void onClick(View v) {
+                detect();
             }
         });
 
-        textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+
+
+        next_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void release() {
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                SparseArray<TextBlock> sparseArray = detections.getDetectedItems();
-                StringBuilder stringBuilder = new StringBuilder();
-
-                for(int i = 0; i<sparseArray.size(); ++i){
-                    TextBlock textBlock = sparseArray.valueAt(i);
-                    if(textBlock != null && textBlock.getValue() != null){
-                        stringBuilder.append(textBlock.getValue() + " ");
-                    }
-                }
-                String stringText = stringBuilder.toString();
-
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                    @Override
-                    public void run() {
-                            stringResult = stringText;
-                            resultObtained();
-                    }
-                });
+            public void onClick(View v) {
+                Intent intent = new Intent(scanner.this, savedImages.class);
+                intent.putExtra("username", usernametemp);
+                startActivity(intent);
             }
         });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void resultObtained(){
-        setContentView(R.layout.activity_scanner);
-        textView1 = findViewById(R.id.textView1);
-        textView1.setText(stringResult);
-        textToSpeech.speak(stringResult,TextToSpeech.QUEUE_FLUSH,null,null);
-
 
     }
-    public void buttonStart(View view){
-        setContentView(R.layout.surfaceview);
-        textRecognizer();
+
+    public void savetodb(){
+        Boolean insert = DB.insertImage(detectedText.getText().toString(),img_conv.getBytes(bitmap),usernametemp); //covert bitmap to byte array
+        if(insert == true){
+            Toast.makeText(scanner.this, "Image Saved", Toast.LENGTH_SHORT).show();
+        }
+        // end of save image to DB
 
     }
+
+    public void detect(){
+        TextRecognizer recogizer = new TextRecognizer.Builder(scanner.this).build();
+
+        bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+        Frame frame =  new Frame.Builder().setBitmap(bitmap).build();
+
+        SparseArray<TextBlock> sparseArray = recogizer.detect(frame);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for(int i = 0; i<sparseArray.size(); i++){
+            TextBlock tx = sparseArray.get(i);
+            String str = tx.getValue();
+
+            stringBuilder.append(str);
+        }
+        detectedText.setText(stringBuilder);
+
+        savetodb();
+
+    }
+
 }
